@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chinese Number Game</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at center, #d8e2f1, #a8c4e2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            margin-bottom: 1rem;
+        }
+
+        #game {
+            display: none;
+            text-align: center;
+        }
+
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            margin: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        #score {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        #options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .correct {
+            background: #22c55e !important;
+        }
+
+        .wrong {
+            background: #ef4444 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🎧 Chinese Number Game</h1>
+
+    <div id="intro">
+        <p>Press Start to hear a number (1–10). Choose the correct one!</p>
+        <button id="startBtn">Start Game</button>
+    </div>
+
+    <div id="game">
+        <audio id="audio"></audio>
+        <div id="options"></div>
+        <div id="score">Score: 0</div>
+    </div>
+
+<script>
+    const startBtn = document.getElementById('startBtn');
+    const gameDiv = document.getElementById('game');
+    const introDiv = document.getElementById('intro');
+    const optionsDiv = document.getElementById('options');
+    const scoreDisplay = document.getElementById('score');
+    const audioEl = document.getElementById('audio');
+
+    let score = 0;
+    let currentNumber = null;
+
+    // Dynamically build list of numbers 1–100 using gTTS speaker
+    const numbers = {};
+    for (let i = 1; i <= 100; i++) {
+        numbers[i] = `audio/chinese/gTTS/${i}.mp3`;
+    }
+
+    const correctFx = new Audio('audio/fx/correct.mp3');
+    const wrongFx = new Audio('audio/fx/wrong.mp3');
+
+    function startGame() {
+        introDiv.style.display = 'none';
+        gameDiv.style.display = 'block';
+        nextQuestion();
+    }
+
+    function nextQuestion() {
+        currentNumber = Math.floor(Math.random() * 100) + 1;
+        audioEl.src = numbers[currentNumber];
+        audioEl.play();
+
+        // Create 3 random wrong answers
+        const options = [currentNumber];
+        while (options.length < 4) {
+            const rand = Math.floor(Math.random() * 100) + 1;
+            if (!options.includes(rand)) options.push(rand);
+        }
+
+        // Shuffle options
+        options.sort(() => Math.random() - 0.5);
+
+        // Render buttons
+        optionsDiv.innerHTML = '';
+        options.forEach(num => {
+            const btn = document.createElement('button');
+            btn.textContent = num;
+            btn.onclick = () => checkAnswer(num, btn);
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selected, btn) {
+        if (selected === currentNumber) {
+            correctFx.play();
+            btn.classList.add('correct');
+            score++;
+            scoreDisplay.textContent = `Score: ${score}`;
+            setTimeout(nextQuestion, 800);
+        } else {
+            wrongFx.play();
+            btn.classList.add('wrong');
+            score--;
+            scoreDisplay.textContent = `Score: ${score}`;
+            audioEl.play(); // replay number
+        }
+    }
+
+    startBtn.addEventListener('click', startGame);
+</script>
+
+</body>
+
+</html>
