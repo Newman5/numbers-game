@@ -50,7 +50,7 @@ Understanding multiple speakers is essential because:
 
 ## 🗂️ Folder Structure
 
-```
+```txt
 chinese-number-game/
 │
 ├── index.html
@@ -89,9 +89,10 @@ The goal is to capture **natural variation** in pronunciation, tone, and pacing.
    * Speak naturally — tone and rhythm as you would in conversation.
 2. Name your folder as:
 
-   ```
+   ```bash
    audio/chinese/Speaker_YourName/
    ```
+
 3. Add your files there and open a **pull request**.
    If you prefer to share files privately, reach out via the repo’s contact email.
 
@@ -129,9 +130,9 @@ Then open `index.html` in your browser and play!
 ### 🌏 License & Credits
 
 This project is open-source and educational.
-Audio by contributors remains under their chosen license (default CC BY 4.0 unless noted).
+Audio by contributors remains under their chosen license (default CC BY 4.0 unless noted).  See [LICENSE.md](LICENSE.md)
 
+### Todo
 
-Todo:
-repeat number sound
-a running list of correct and incorrect answers - streaks and common mistakes - toggle to see the last one or a long list of past answers
+* repeat number sound
+* a running list of correct and incorrect answers - streaks and common mistakes - toggle to see the last one or a long list of past answers
