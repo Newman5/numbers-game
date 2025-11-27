@@ -47,6 +47,21 @@
             margin-top: 1rem;
         }
 
+        #streak {
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+            color: #dc2626;
+        }
+
+        #replayBtn {
+            background: #6b7280;
+            margin-bottom: 1rem;
+        }
+
+        #replayBtn:hover {
+            background: #4b5563;
+        }
+
         #options {
             display: flex;
             flex-wrap: wrap;
@@ -69,14 +84,16 @@
     <h1>🎧 Chinese Number Game</h1>
 
     <div id="intro">
-        <p>Press Start to hear a number (1–10). Choose the correct one!</p>
+        <p>Press Start to hear a number (1–100). Choose the correct one!</p>
         <button id="startBtn">Start Game</button>
     </div>
 
     <div id="game">
         <audio id="audio"></audio>
+        <button id="replayBtn">🔊 Replay</button>
         <div id="options"></div>
         <div id="score">Score: 0</div>
+        <div id="streak">🔥 Streak: 0</div>
     </div>
 
 <script>
@@ -85,19 +102,30 @@
     const introDiv = document.getElementById('intro');
     const optionsDiv = document.getElementById('options');
     const scoreDisplay = document.getElementById('score');
+    const streakDisplay = document.getElementById('streak');
+    const replayBtn = document.getElementById('replayBtn');
     const audioEl = document.getElementById('audio');
 
     let score = 0;
+    let streak = 0;
     let currentNumber = null;
+    let currentSpeaker = null;
 
-    // Dynamically build list of numbers 1–100 using gTTS speaker
-    const numbers = {};
-    for (let i = 1; i <= 100; i++) {
-        numbers[i] = `audio/chinese/gTTS/${i}.mp3`;
-    }
+    // Available speaker folders (add more as they become available)
+    const speakers = ['gTTS'];
 
     const correctFx = new Audio('audio/fx/correct.mp3');
     const wrongFx = new Audio('audio/fx/wrong.mp3');
+
+    // Select a random speaker from the available speakers
+    function getRandomSpeaker() {
+        return speakers[Math.floor(Math.random() * speakers.length)];
+    }
+
+    // Get audio path for a number from a specific speaker
+    function getAudioPath(number, speaker) {
+        return `audio/chinese/${speaker}/${number}.mp3`;
+    }
 
     function startGame() {
         introDiv.style.display = 'none';
@@ -105,9 +133,17 @@
         nextQuestion();
     }
 
+    function replayAudio() {
+        if (audioEl.src) {
+            audioEl.currentTime = 0;
+            audioEl.play();
+        }
+    }
+
     function nextQuestion() {
         currentNumber = Math.floor(Math.random() * 100) + 1;
-        audioEl.src = numbers[currentNumber];
+        currentSpeaker = getRandomSpeaker();
+        audioEl.src = getAudioPath(currentNumber, currentSpeaker);
         audioEl.play();
 
         // Create 3 random wrong answers
@@ -130,23 +166,31 @@
         });
     }
 
+    function updateDisplay() {
+        scoreDisplay.textContent = `Score: ${score}`;
+        streakDisplay.textContent = `🔥 Streak: ${streak}`;
+    }
+
     function checkAnswer(selected, btn) {
         if (selected === currentNumber) {
             correctFx.play();
             btn.classList.add('correct');
             score++;
-            scoreDisplay.textContent = `Score: ${score}`;
+            streak++;
+            updateDisplay();
             setTimeout(nextQuestion, 800);
         } else {
             wrongFx.play();
             btn.classList.add('wrong');
             score--;
-            scoreDisplay.textContent = `Score: ${score}`;
+            streak = 0;
+            updateDisplay();
             audioEl.play(); // replay number
         }
     }
 
     startBtn.addEventListener('click', startGame);
+    replayBtn.addEventListener('click', replayAudio);
 </script>
 
 </body>
