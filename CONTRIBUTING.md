@@ -19,7 +19,7 @@ We are currently seeking **native Mandarin Chinese speakers** to record numbers 
 
 * **Folder naming:**
 
-  ```
+  ```bash
   audio/chinese/Speaker_YourName/
   ```
 
@@ -35,7 +35,7 @@ We are currently seeking **native Mandarin Chinese speakers** to record numbers 
 
 Include a small `info.txt` file in your folder:
 
-```
+```bash
 Name: Li Ming
 Region: Beijing, China
 Accent: Standard Mandarin
@@ -57,6 +57,14 @@ We welcome developers, designers, and learners to help expand the project.
 * Adding multi-speaker randomization logic
 * Language expansions (add folders for English, Japanese, etc.)
 * Documentation improvements and translations
+
+### Copilot & Agent Coding Guidelines
+
+* Write code as simply as possible; avoid complex structures.
+* Use patterns and techniques suitable for novice coders.
+* Add clear, helpful comments for collaborators.
+* Prioritize readability and ease of contribution.
+* When in doubt, choose clarity over cleverness.
 
 ### Setup Instructions
 
